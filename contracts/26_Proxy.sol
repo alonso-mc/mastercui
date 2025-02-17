@@ -1,40 +1,22 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.7.0 <0.9.0;
 
-
-contract Enums {
-    enum Status {
-        None,
-        Pending,
-        Shipped,
-        Completed,
-        Rejected,
-        Canceled
+contract DataLocations {
+    struct MyStruct {
+        uint foo;
+        string text;
     }
 
-    Status public status;
+    mapping(address => MyStruct) public myStructs;
 
-    struct Order {
-        address buyer;
-        Status status;
+    function examples(uint[] calldata, string calldata) external returns (uint[] memory){
+        myStructs[msg.sender] = MyStruct({foo:123, text: "bar"});
+        MyStruct storage myStruct = myStructs[msg.sender];
+        myStruct.text = "foo";
+        MyStruct memory readOnly = myStructs[msg.sender];
+        readOnly.foo;
+        uint[] memory memArr = new uint[](3);
+        memArr[0] = 1;
+        return memArr;
     }
-
-    Order[] public orders;
-
-    function get() external  view returns (Status) {
-        return status;
-    }
-
-    function set(Status _status) external {
-        status = _status;
-    }
-
-    function ship() external {
-        status = Status.Shipped;
-    }
-
-    function reset() external {
-        delete status;
-    }
-
 }
